@@ -64,8 +64,31 @@ var payPalCheckoutGateway = {
     },
 
 }
+function hideProductImagePlaceholder() {
+  const productimageInput = document.querySelector(
+    'input[name="productimage"]'
+  );
+  if (productimageInput) {
+         console.log(productimageInput.getAttribute("src"));
 
-
+  }
+}
+$(document).on(
+  "page:afterin",
+  '.page[data-name="productdetail"]',
+    function (e, page) {
+        console.log(page)
+        //hideProductImagePlaceholder()
+   //hideProductImagePlaceholder()
+        const imageUrl = $('input[name="productimage"]').css("background-image");  
+        var extractedUrl = imageUrl
+        .replace(/^url\(["']?/, "")
+        .replace(/["']?\)$/, "");
+        
+        $('input[name="productimage"]').attr('src', extractedUrl);
+    console.log(extractedUrl);
+    }
+);
 $(document).on('click', '#toto', function (e) {
     eCommerceFirestorePlugin.ConvertCartToHistory();
 });
