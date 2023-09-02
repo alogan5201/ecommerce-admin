@@ -2008,8 +2008,8 @@ ul:after {
 }
 
 .firebase_document_preview {
-  height: 200px;
   width: 100%;
+  padding-bottom: 0; /* 9/16 = 0.5625 for 16:9 aspect ratio */
   background-color: rgb(224, 224, 224) !important;
   background-image: url("../img/image-placeholder.png");
   background-size: contain;
@@ -2017,10 +2017,11 @@ ul:after {
   background-position: center center;
   cursor: pointer;
   border: 2px solid rgba(123, 185, 249, 0);
-  padding: 0px;
+  padding-top: 0px;
   float: left;
   margin-top: 8px;
   border-radius: 0px;
+  position: relative;
 }
 
 .firebase_document_preview:hover {

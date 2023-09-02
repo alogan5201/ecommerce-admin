@@ -74,7 +74,7 @@ function hideProductImagePlaceholder() {
   }
 }
 $(document).on(
-  "page:afterin",
+  "page:beforein",
   '.page[data-name="productdetail"]',
     function (e, page) {
         console.log(page)
@@ -84,11 +84,53 @@ $(document).on(
         var extractedUrl = imageUrl
         .replace(/^url\(["']?/, "")
         .replace(/["']?\)$/, "");
-        
+        $('input[name="productimage"]').css("opacity", "1")
         $('input[name="productimage"]').attr('src', extractedUrl);
-    console.log(extractedUrl);
+   
     }
 );
+function extractSecondUrl(str) {
+  const regex = /url\("([^"]+)"\)/g;
+  const matches = [];
+  let match;
+
+  while ((match = regex.exec(str))) {
+    matches.push(match[1]);
+  }
+
+  return matches[1] || null; // Return the second URL or null if it doesn't exist
+}
+
+
+
+$(document).on(
+  "page:afterin",
+  '.page[data-name="productdetail"]',
+  function (e, page) {
+    console.log(page);
+
+    // Extract the URL from the input's background-image
+      const imageUrl = $('input[name="productimage"]').css("background-image");
+      console.log("🚀 ~ imageUrl:", imageUrl)
+      if (imageUrl) {
+          const extractedUrl = imageUrl
+            .replace(/^url\(["']?/, "")
+            .replace(/["']?\)$/, "");
+            console.log("🚀 ~ extractedUrl:", extractedUrl);
+            const newUrl = extractSecondUrl(extractedUrl)
+            $('input[name="productimage"]').attr("src", newUrl);
+            $('input[name="productimage"]').css("background-image", "none");
+          
+      }
+    // Ensure the parent of the input has a relative position for the absolute positioning of the appended div
+    $('input[name="productimage"]').parent().css("position", "relative");
+
+    // Append the div with the background-image set to the extractedUrl
+/*     $('input[name="productimage"]').parent().append(`<div class='img img-thumbnail firebase_document_preview testClass'style='position:absolute; width:100%; top:0; background-image:url("${extractedUrl}")'>New Div</div>`
+      ); */
+  }
+);
+
 $(document).on('click', '#toto', function (e) {
     eCommerceFirestorePlugin.ConvertCartToHistory();
 });
