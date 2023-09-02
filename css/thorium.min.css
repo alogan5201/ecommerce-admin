@@ -2022,6 +2022,7 @@ ul:after {
   margin-top: 8px;
   border-radius: 0px;
   position: relative;
+  min-height: 386px;
 }
 
 .firebase_document_preview:hover {

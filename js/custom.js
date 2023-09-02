@@ -86,8 +86,20 @@ $(document).on(
         .replace(/["']?\)$/, "");
         $('input[name="productimage"]').css("opacity", "1")
         $('input[name="productimage"]').attr('src', extractedUrl);
-   
+         if (localStorage.getItem("productimage")) {
+           localStorage.removeItem("productimage");
+         }
     }
+);
+$(document).on(
+  "page:afterout",
+  '.page[data-name="productdetail"]',
+    function (e, page) {
+        if (localStorage.getItem("productimage")) {
+            localStorage.removeItem("productimage");
+          
+      }
+  }
 );
 function extractSecondUrl(str) {
   const regex = /url\("([^"]+)"\)/g;
@@ -112,16 +124,25 @@ $(document).on(
     // Extract the URL from the input's background-image
       const imageUrl = $('input[name="productimage"]').css("background-image");
       console.log("🚀 ~ imageUrl:", imageUrl)
-      if (imageUrl) {
-          const extractedUrl = imageUrl
-            .replace(/^url\(["']?/, "")
-            .replace(/["']?\)$/, "");
-            console.log("🚀 ~ extractedUrl:", extractedUrl);
-            const newUrl = extractSecondUrl(extractedUrl)
+      if (imageUrl || localStorage.getItem("productimage")) {
+        const extractedUrl = imageUrl
+          .replace(/^url\(["']?/, "")
+          .replace(/["']?\)$/, "");
+        console.log("🚀 ~ extractedUrl:", extractedUrl);
+        const newUrl = extractSecondUrl(extractedUrl);
+        if (!localStorage.getItem("productimage")) {
             $('input[name="productimage"]').attr("src", newUrl);
             $('input[name="productimage"]').css("background-image", "none");
-          
-      }
+            localStorage.setItem("productimage", newUrl);
+            
+        }
+        else {
+              $('input[name="productimage"]').attr("src", localStorage.getItem("productimage"));
+              $('input[name="productimage"]').css("background-image", "none");
+              
+          }
+        
+    }
     // Ensure the parent of the input has a relative position for the absolute positioning of the appended div
     $('input[name="productimage"]').parent().css("position", "relative");
 
